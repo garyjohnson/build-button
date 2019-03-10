@@ -6,7 +6,7 @@ BLEHidAdafruit blehid;
 
 bool hasKeyPressed = false;
 
-#define PIN_BUTTON   A0
+#define PIN_BUTTON   A1
 
 void setup() {
   pinMode(PIN_BUTTON, INPUT_PULLUP);
