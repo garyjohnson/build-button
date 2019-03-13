@@ -2,8 +2,9 @@
 
 FILE='.button'
 if [ -f $FILE ]; then
-  command=`cat $FILE`
-  eval $command
+  while read p; do
+    eval $p
+  done < $FILE
 else
   echo "No .button file found in current directory!"
 fi
