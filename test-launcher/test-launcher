@@ -1,0 +1,9 @@
+#!/bin/bash
+
+FILE='.button'
+if [ -f $FILE ]; then
+  command=`cat $FILE`
+  eval $command
+else
+  echo "No .button file found in current directory!"
+fi
