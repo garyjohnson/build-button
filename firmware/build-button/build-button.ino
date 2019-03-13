@@ -1,4 +1,3 @@
-
 #include <bluefruit.h>
 
 BLEDis bledis;
@@ -28,9 +27,9 @@ void loop() {
     blehid.keyRelease();
     delay(5);
   }
-    
+ 
   if ( digitalRead(PIN_BUTTON) == 1 ) {
-    blehid.keyboardReport(KEYBOARD_MODIFIER_LEFTCTRL|KEYBOARD_MODIFIER_LEFTALT, HID_KEY_F12);
+    blehid.keyboardReport(KEYBOARD_MODIFIER_LEFTCTRL|KEYBOARD_MODIFIER_LEFTSHIFT, HID_KEY_6);
     hasKeyPressed = true;
     
     delay(500);
