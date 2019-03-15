@@ -1,53 +1,45 @@
-#include <bluefruit.h>
+#include "LedApp.h"
+#include "BleKeyboardApp.h"
+#include "ButtonApp.h"
 
-BLEDis bledis;
-BLEHidAdafruit blehid;
+unsigned long previousRunningTime = 0;
+unsigned long runningTime = 0;
+unsigned long timeSinceLastUpdate = 0;
 
-bool hasKeyPressed = false;
-
-#define PIN_BUTTON   A1
+BleKeyboardApp bleKeyboard = BleKeyboardApp();
+ButtonApp button = ButtonApp();
 
 void setup() {
-  pinMode(PIN_BUTTON, INPUT_PULLUP);
+  runningTime = micros();
 
-  Bluefruit.begin();
-  Bluefruit.setTxPower(4);
-  Bluefruit.setName("Build Button");
-  bledis.setManufacturer("Gary Johnson");
-  bledis.setModel("Build Button");
-  bledis.begin();
-  blehid.begin();
-  blehid.setKeyboardLedCallback(setKeyboardLed);
-  startAdvertising();
+  button.setup();
+  bleKeyboard.setup();
+
+  button.setReleaseHandler(onButtonRelease);
 }
 
 void loop() {
-  if ( hasKeyPressed ) {
-    hasKeyPressed = false;
-    blehid.keyRelease();
-    delay(5);
-  }
- 
-  if ( digitalRead(PIN_BUTTON) == 1 ) {
-    blehid.keyboardReport(KEYBOARD_MODIFIER_LEFTCTRL|KEYBOARD_MODIFIER_LEFTSHIFT, HID_KEY_6);
-    hasKeyPressed = true;
-    
-    delay(500);
-  }
+  do {
+    previousRunningTime = runningTime;
+    runningTime = micros();
+    timeSinceLastUpdate = runningTime - previousRunningTime;
+  } while(update(runningTime, timeSinceLastUpdate));
 
   waitForEvent();  
 }
 
-void startAdvertising() {  
-  Bluefruit.Advertising.addFlags(BLE_GAP_ADV_FLAGS_LE_ONLY_GENERAL_DISC_MODE);
-  Bluefruit.Advertising.addTxPower();
-  Bluefruit.Advertising.addAppearance(BLE_APPEARANCE_HID_KEYBOARD);
-  Bluefruit.Advertising.addService(blehid);
-  Bluefruit.Advertising.addName();
-  Bluefruit.Advertising.restartOnDisconnect(true);
-  Bluefruit.Advertising.setInterval(32, 244);    // in unit of 0.625 ms
-  Bluefruit.Advertising.setFastTimeout(30);      // number of seconds in fast mode
-  Bluefruit.Advertising.start(0);                // 0 = Don't stop advertising after n seconds
+bool update(unsigned long runTime, unsigned long updateDelta) {
+  return button.update(runTime, updateDelta);
 }
 
-void setKeyboardLed(uint8_t led_bitmap) { }
+void onButtonRelease(unsigned long holdDuration) {
+  unsigned long stageLength = 1000000 / 3;
+  if(holdDuration < stageLength) {
+    bleKeyboard.sendStage1Key();
+  } else if(holdDuration < stageLength*2) {
+    bleKeyboard.sendStage2Key();
+  } else {
+    bleKeyboard.sendStage3Key();
+  }
+}
+
