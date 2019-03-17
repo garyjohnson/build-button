@@ -8,11 +8,13 @@ unsigned long timeSinceLastUpdate = 0;
 
 BleKeyboardApp bleKeyboard = BleKeyboardApp();
 ButtonApp button = ButtonApp();
+LedApp led = LedApp();
 
 void setup() {
   runningTime = micros();
 
   button.setup();
+  led.setup();
   bleKeyboard.setup();
 
   button.setReleaseHandler(onButtonRelease);
@@ -29,7 +31,13 @@ void loop() {
 }
 
 bool update(unsigned long runTime, unsigned long updateDelta) {
-  return button.update(runTime, updateDelta);
+  bool buttonKeepRunning = button.update(runTime, updateDelta);
+
+  led.setButtonPressDuration(button.getHeldDuration());
+
+  bool ledKeepRunning = led.update(runTime, updateDelta);
+
+  return buttonKeepRunning || ledKeepRunning;
 }
 
 void onButtonRelease(unsigned long holdDuration) {
