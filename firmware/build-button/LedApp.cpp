@@ -8,20 +8,6 @@ LedApp::~LedApp() {
 
 void LedApp::setup() {
   pixels = Adafruit_NeoPixel(NEOPIXEL_COUNT, PIN_NEOPIXEL, NEO_GRB + NEO_KHZ800);
-
-  off = pixels.Color(0,0,0);
-  lowStage1 = pixels.Color(0,0,10);
-  highStage1 = pixels.Color(0,0,255);
-  highStage2 = pixels.Color(255,0,128);
-  highStage3 = pixels.Color(255,0,0);
-
-  currentLowColor = 0;
-  currentHighColor = 0;
-
-  maxHold = 1000000;
-
-  buttonPressDuration = 0;
-
   pixels.begin(); 
   pixels.show(); 
 }
