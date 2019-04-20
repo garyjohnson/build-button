@@ -8,8 +8,6 @@ ButtonApp::~ButtonApp() {
 
 void ButtonApp::setup() {
   pinMode(PIN_BUTTON, INPUT_PULLUP);
-  timeKeyPressed = 0;
-  onRelease = NULL;
 }
 
 bool ButtonApp::update(unsigned long runTime, unsigned long updateDelta) {

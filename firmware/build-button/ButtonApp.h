@@ -9,8 +9,8 @@ typedef void (*releaseHandler)(unsigned long);
 
 class ButtonApp {
   private:
-    unsigned long timeKeyPressed;
-    releaseHandler onRelease;
+    unsigned long timeKeyPressed = 0;
+    releaseHandler onRelease = NULL;
   public:
     ButtonApp();
     ~ButtonApp();
