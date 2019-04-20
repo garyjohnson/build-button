@@ -5,6 +5,7 @@
 
 class BleKeyboardApp {
   private:
+    uint8_t keycodes[6] = { 0 };
     BLEDis bledis;
     BLEHidAdafruit blehid;
     void initializeBleService();

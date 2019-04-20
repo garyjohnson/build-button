@@ -12,17 +12,20 @@ void BleKeyboardApp::setup() {
 }
 
 void BleKeyboardApp::sendStage1Key() {
-  blehid.keyboardReport(KEYBOARD_MODIFIER_LEFTALT|KEYBOARD_MODIFIER_LEFTCTRL, HID_KEY_6);
+  keycodes[0] = HID_KEY_6;
+  blehid.keyboardReport((uint8_t)KEYBOARD_MODIFIER_LEFTALT|KEYBOARD_MODIFIER_LEFTCTRL, keycodes);
   blehid.keyRelease();
 }
 
 void BleKeyboardApp::sendStage2Key() {
-  blehid.keyboardReport(KEYBOARD_MODIFIER_LEFTALT|KEYBOARD_MODIFIER_LEFTCTRL, HID_KEY_7);
+  keycodes[0] = HID_KEY_7;
+  blehid.keyboardReport((uint8_t)KEYBOARD_MODIFIER_LEFTALT|KEYBOARD_MODIFIER_LEFTCTRL, keycodes);
   blehid.keyRelease();
 }
 
 void BleKeyboardApp::sendStage3Key() {
-  blehid.keyboardReport(KEYBOARD_MODIFIER_LEFTALT|KEYBOARD_MODIFIER_LEFTCTRL, HID_KEY_8);
+  keycodes[0] = HID_KEY_8;
+  blehid.keyboardReport((uint8_t)KEYBOARD_MODIFIER_LEFTALT|KEYBOARD_MODIFIER_LEFTCTRL, keycodes);
   blehid.keyRelease();
 }
 
