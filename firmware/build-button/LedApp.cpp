@@ -8,11 +8,65 @@ LedApp::~LedApp() {
 
 void LedApp::setup() {
   pixels = Adafruit_NeoPixel(NEOPIXEL_COUNT, PIN_NEOPIXEL, NEO_GRB + NEO_KHZ800);
-  pixels.begin(); 
-  pixels.show(); 
+  pixels.begin();
+  pixels.show();
 }
 
 bool LedApp::update(unsigned long runTime, unsigned long updateDelta) {
+  if(animation >= 0) {
+    handleAnimation(runTime, updateDelta);
+  } else {
+    handleButtonHold(runTime, updateDelta);
+  }
+
+  return false;
+}
+
+void LedApp::setButtonPressDuration(unsigned long duration) {
+  if(buttonPressDuration == 0 && duration > 0) {
+    endAnimation();
+  }
+
+  buttonPressDuration = duration;
+}
+
+void LedApp::startAnimationForStage(unsigned int stage) {
+  if(stage >= 3) {
+    return;
+  }
+
+  animation = stage;
+}
+
+void LedApp::handleAnimation(unsigned long runTime, unsigned long updateDelta) {
+  animationDuration += updateDelta;
+
+  if(animationDuration >= maxAnimationDuration) {
+    endAnimation();
+    return;
+  }
+
+  unsigned int blinkPhase = animationDuration / blinkDuration;
+  bool on = blinkPhase % 2 == 0;
+
+  unsigned long color = off;
+  if(on) {
+    if(animation == 0) {
+      color = highStage1;
+    } else if(animation == 1) {
+      color = highStage2;
+    } else if(animation == 2) {
+      color = highStage3;
+    }
+  }
+
+  for(int i = 0; i < NEOPIXEL_COUNT; i++) {
+    pixels.setPixelColor(i, color);
+  }
+  pixels.show();
+}
+
+void LedApp::handleButtonHold(unsigned long runTime, unsigned long updateDelta) {
   unsigned int maxPixels = (unsigned int)(((float)buttonPressDuration / (float)maxHold) * (NEOPIXEL_COUNT * 3));
   int maxPixel = maxPixels % NEOPIXEL_COUNT;
   int step = maxPixels / NEOPIXEL_COUNT;
@@ -22,7 +76,7 @@ bool LedApp::update(unsigned long runTime, unsigned long updateDelta) {
       pixels.setPixelColor(i, off);
     }
     pixels.show();
-    return false;
+    return;
   }
 
   if(step >= 3) {
@@ -30,7 +84,7 @@ bool LedApp::update(unsigned long runTime, unsigned long updateDelta) {
       pixels.setPixelColor(i, highStage3);
     }
     pixels.show();
-    return false;
+    return;
   }
 
   // fill in the bright pixels
@@ -58,9 +112,13 @@ bool LedApp::update(unsigned long runTime, unsigned long updateDelta) {
     pixels.setPixelColor(i, currentLowColor);
   }
   pixels.show();
-  return false;
 }
 
-void LedApp::setButtonPressDuration(unsigned long duration) {
-  buttonPressDuration = duration;
+void LedApp::endAnimation() {
+  animation = -1;
+  animationDuration = 0;
+  for(int i = 0; i < NEOPIXEL_COUNT; i++) {
+    pixels.setPixelColor(i, off);
+  }
+  pixels.show();
 }

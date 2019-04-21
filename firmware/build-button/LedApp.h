@@ -19,12 +19,22 @@ class LedApp {
     unsigned long currentHighColor = 0;
     unsigned long maxHold = 1000000;
     unsigned long buttonPressDuration = 0;
+
+    int animation = -1;
+    unsigned long animationDuration = 0;
+
+    void handleAnimation(unsigned long runTime, unsigned long updateDelta);
+    void handleButtonHold(unsigned long runTime, unsigned long updateDelta);
+    void endAnimation();
+    unsigned long blinkDuration = 100000;
+    unsigned long maxAnimationDuration = 600000;
   public:
     LedApp();
     ~LedApp();
     void setup();
     bool update(unsigned long runTime, unsigned long updateDelta);
     void setButtonPressDuration(unsigned long duration);
+    void startAnimationForStage(unsigned int stage);
 };
 
 #endif

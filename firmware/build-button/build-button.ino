@@ -43,10 +43,13 @@ bool update(unsigned long runTime, unsigned long updateDelta) {
 void onButtonRelease(unsigned long holdDuration) {
   unsigned long stageLength = 1000000 / 3;
   if(holdDuration < stageLength) {
+    led.startAnimationForStage(0);
     bleKeyboard.sendStage1Key();
   } else if(holdDuration < stageLength*2) {
+    led.startAnimationForStage(1);
     bleKeyboard.sendStage2Key();
   } else {
+    led.startAnimationForStage(2);
     bleKeyboard.sendStage3Key();
   }
 }
