@@ -51,18 +51,9 @@ void LedApp::handleAnimation(unsigned long runTime, unsigned long updateDelta) {
 
   unsigned long color = off;
   if(on) {
-    if(animation == 0) {
-      color = highStage1;
-    } else if(animation == 1) {
-      color = highStage2;
-    } else if(animation == 2) {
-      color = highStage3;
-    }
+    color = highStages[animation];
   }
-
-  for(int i = 0; i < NEOPIXEL_COUNT; i++) {
-    pixels.setPixelColor(i, color);
-  }
+  pixels.fill(color);
   pixels.show();
 }
 
@@ -72,17 +63,13 @@ void LedApp::handleButtonHold(unsigned long runTime, unsigned long updateDelta) 
   int step = maxPixels / NEOPIXEL_COUNT;
 
   if(buttonPressDuration == 0) {
-    for(int i = 0; i < NEOPIXEL_COUNT; i++) {
-      pixels.setPixelColor(i, off);
-    }
+    pixels.fill(off);
     pixels.show();
     return;
   }
 
   if(step >= 3) {
-    for(int i = 0; i < NEOPIXEL_COUNT; i++) {
-      pixels.setPixelColor(i, highStage3);
-    }
+    pixels.fill(highStages[2]);
     pixels.show();
     return;
   }
@@ -91,22 +78,22 @@ void LedApp::handleButtonHold(unsigned long runTime, unsigned long updateDelta) 
   for(int i = 0; i < maxPixels; i++) {
     int pixel = i % NEOPIXEL_COUNT;
     if(i < NEOPIXEL_COUNT) {
-      currentHighColor = highStage1;
+      currentHighColor = highStages[0];
     } else if(i < (NEOPIXEL_COUNT*2)) {
-      currentHighColor = highStage2;
+      currentHighColor = highStages[1];
     } else if(i < (NEOPIXEL_COUNT*3)) {
-      currentHighColor = highStage3;
+      currentHighColor = highStages[2];
     }
     pixels.setPixelColor(pixel, currentHighColor);
   }
 
   // fill in the background pixels
   if(step == 0) {
-    currentLowColor = lowStage1;
+    currentLowColor = lowStages[0];
   } else if(step == 1) {
-    currentLowColor = highStage1;
+    currentLowColor = lowStages[1];
   } else if(step == 2) {
-    currentLowColor = highStage2;
+    currentLowColor = lowStages[2];
   }
   for(int i = maxPixel; i < NEOPIXEL_COUNT; i++) {
     pixels.setPixelColor(i, currentLowColor);
@@ -117,8 +104,6 @@ void LedApp::handleButtonHold(unsigned long runTime, unsigned long updateDelta) 
 void LedApp::endAnimation() {
   animation = -1;
   animationDuration = 0;
-  for(int i = 0; i < NEOPIXEL_COUNT; i++) {
-    pixels.setPixelColor(i, off);
-  }
+  pixels.fill(off);
   pixels.show();
 }

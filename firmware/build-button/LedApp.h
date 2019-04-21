@@ -9,15 +9,26 @@
 class LedApp {
   private:
     Adafruit_NeoPixel pixels;
-    unsigned long off = pixels.Color(0,0,0);
-    unsigned long lowStage1 = pixels.Color(0,0,10);
-    unsigned long highStage1 = pixels.Color(0,0,255);
-    unsigned long highStage2 = pixels.Color(255,0,128);
-    unsigned long highStage3 = pixels.Color(255,0,0);
+    const unsigned long off = pixels.Color(0,0,0);
+
+    const unsigned long lowStages[3] = { 
+      pixels.Color(0,0,10),
+      pixels.Color(0,0,255),
+      pixels.Color(255,0,128),
+    };
+
+    const unsigned long highStages[3] = { 
+      pixels.Color(0,0,255),
+      pixels.Color(255,0,128),
+      pixels.Color(255,0,0),
+    };
+
+    const unsigned long maxHold = 1000000;
+    const unsigned long blinkDuration = 100000;
+    const unsigned long maxAnimationDuration = 600000;
 
     unsigned long currentLowColor = 0;
     unsigned long currentHighColor = 0;
-    unsigned long maxHold = 1000000;
     unsigned long buttonPressDuration = 0;
 
     int animation = -1;
@@ -26,8 +37,6 @@ class LedApp {
     void handleAnimation(unsigned long runTime, unsigned long updateDelta);
     void handleButtonHold(unsigned long runTime, unsigned long updateDelta);
     void endAnimation();
-    unsigned long blinkDuration = 100000;
-    unsigned long maxAnimationDuration = 600000;
   public:
     LedApp();
     ~LedApp();
