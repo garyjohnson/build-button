@@ -2,9 +2,9 @@
 #include "BleKeyboardApp.h"
 #include "ButtonApp.h"
 
-unsigned long previousRunningTime = 0;
-unsigned long runningTime = 0;
-unsigned long timeSinceLastUpdate = 0;
+uint32_t previousRunningTime = 0;
+uint32_t runningTime = 0;
+uint32_t timeSinceLastUpdate = 0;
 
 BleKeyboardApp bleKeyboard = BleKeyboardApp();
 ButtonApp button = ButtonApp();
@@ -30,7 +30,7 @@ void loop() {
   waitForEvent();  
 }
 
-bool update(unsigned long runTime, unsigned long updateDelta) {
+bool update(uint32_t runTime, uint32_t updateDelta) {
   bool buttonKeepRunning = button.update(runTime, updateDelta);
 
   led.setButtonPressDuration(button.getHeldDuration());
@@ -40,17 +40,10 @@ bool update(unsigned long runTime, unsigned long updateDelta) {
   return buttonKeepRunning || ledKeepRunning;
 }
 
-void onButtonRelease(unsigned long holdDuration) {
-  unsigned long stageLength = 1000000 / 3;
-  if(holdDuration < stageLength) {
-    led.startAnimationForStage(0);
-    bleKeyboard.sendStage1Key();
-  } else if(holdDuration < stageLength*2) {
-    led.startAnimationForStage(1);
-    bleKeyboard.sendStage2Key();
-  } else {
-    led.startAnimationForStage(2);
-    bleKeyboard.sendStage3Key();
-  }
+void onButtonRelease(uint32_t holdDuration) {
+  uint32_t stageLength = 1000000 / 3;
+  uint8_t stage = min(holdDuration / stageLength, 2);
+  led.startAnimationForStage(stage);
+  bleKeyboard.sendKeyForStage(stage);
 }
 

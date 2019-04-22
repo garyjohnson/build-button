@@ -15,9 +15,7 @@ class BleKeyboardApp {
     BleKeyboardApp();
     ~BleKeyboardApp();
     void setup();
-    void sendStage1Key();
-    void sendStage2Key();
-    void sendStage3Key();
+    void sendKeyForStage(uint8_t stage);
 };
 
 #endif

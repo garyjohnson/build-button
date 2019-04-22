@@ -11,20 +11,13 @@ void BleKeyboardApp::setup() {
   startAdvertising();
 }
 
-void BleKeyboardApp::sendStage1Key() {
-  keycodes[0] = HID_KEY_6;
-  blehid.keyboardReport((uint8_t)KEYBOARD_MODIFIER_LEFTALT|KEYBOARD_MODIFIER_LEFTCTRL, keycodes);
-  blehid.keyRelease();
-}
+void BleKeyboardApp::sendKeyForStage(uint8_t stage) {
+  if(stage > 2) {
+    return;
+  }
 
-void BleKeyboardApp::sendStage2Key() {
-  keycodes[0] = HID_KEY_7;
-  blehid.keyboardReport((uint8_t)KEYBOARD_MODIFIER_LEFTALT|KEYBOARD_MODIFIER_LEFTCTRL, keycodes);
-  blehid.keyRelease();
-}
-
-void BleKeyboardApp::sendStage3Key() {
-  keycodes[0] = HID_KEY_8;
+  uint8_t keysForStage[3] = { HID_KEY_6, HID_KEY_7, HID_KEY_8 };
+  keycodes[0] = keysForStage[stage];
   blehid.keyboardReport((uint8_t)KEYBOARD_MODIFIER_LEFTALT|KEYBOARD_MODIFIER_LEFTCTRL, keycodes);
   blehid.keyRelease();
 }

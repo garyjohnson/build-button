@@ -12,7 +12,7 @@ void LedApp::setup() {
   pixels.show();
 }
 
-bool LedApp::update(unsigned long runTime, unsigned long updateDelta) {
+bool LedApp::update(uint32_t runTime, uint32_t updateDelta) {
   if(animation >= 0) {
     handleAnimation(runTime, updateDelta);
   } else {
@@ -22,7 +22,7 @@ bool LedApp::update(unsigned long runTime, unsigned long updateDelta) {
   return false;
 }
 
-void LedApp::setButtonPressDuration(unsigned long duration) {
+void LedApp::setButtonPressDuration(uint32_t duration) {
   if(buttonPressDuration == 0 && duration > 0) {
     endAnimation();
   }
@@ -38,7 +38,7 @@ void LedApp::startAnimationForStage(unsigned int stage) {
   animation = stage;
 }
 
-void LedApp::handleAnimation(unsigned long runTime, unsigned long updateDelta) {
+void LedApp::handleAnimation(uint32_t runTime, uint32_t updateDelta) {
   animationDuration += updateDelta;
 
   if(animationDuration >= maxAnimationDuration) {
@@ -56,7 +56,7 @@ void LedApp::handleAnimation(unsigned long runTime, unsigned long updateDelta) {
   pixels.show();
 }
 
-void LedApp::handleButtonHold(unsigned long runTime, unsigned long updateDelta) {
+void LedApp::handleButtonHold(uint32_t runTime, uint32_t updateDelta) {
   unsigned int maxPixels = (unsigned int)(((float)buttonPressDuration / (float)maxHold) * (NEOPIXEL_COUNT * 3));
   int maxPixel = maxPixels % NEOPIXEL_COUNT;
   int step = min(maxPixels / NEOPIXEL_COUNT, 3);
@@ -67,10 +67,10 @@ void LedApp::handleButtonHold(unsigned long runTime, unsigned long updateDelta) 
     return;
   }
 
-  unsigned long currentLowColor = lowStages[step];
+  uint32_t currentLowColor = lowStages[step];
   pixels.fill(currentLowColor);
 
-  unsigned long currentHighColor = highStages[step];
+  uint32_t currentHighColor = highStages[step];
   for(int i = 0; i < maxPixel; i++) {
     int pixel = i % NEOPIXEL_COUNT;
     pixels.setPixelColor(pixel, currentHighColor);

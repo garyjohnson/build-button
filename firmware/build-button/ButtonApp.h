@@ -5,19 +5,19 @@
 
 #define PIN_BUTTON   A1
 
-typedef void (*releaseHandler)(unsigned long);
+typedef void (*releaseHandler)(uint32_t);
 
 class ButtonApp {
   private:
-    unsigned long timeKeyPressed = 0;
+    uint32_t timeKeyPressed = 0;
     releaseHandler onRelease = NULL;
   public:
     ButtonApp();
     ~ButtonApp();
     void setup();
-    bool update(unsigned long runTime, unsigned long updateDelta);
+    bool update(uint32_t runTime, uint32_t updateDelta);
     void setReleaseHandler(releaseHandler);
-    unsigned long getHeldDuration();
+    uint32_t getHeldDuration();
 };
 
 #endif

@@ -10,7 +10,7 @@ void ButtonApp::setup() {
   pinMode(PIN_BUTTON, INPUT_PULLUP);
 }
 
-bool ButtonApp::update(unsigned long runTime, unsigned long updateDelta) {
+bool ButtonApp::update(uint32_t runTime, uint32_t updateDelta) {
   if (digitalRead(PIN_BUTTON) == 1) {
     timeKeyPressed += updateDelta;
     return true;
@@ -28,6 +28,6 @@ void ButtonApp::setReleaseHandler(releaseHandler handler) {
   onRelease = handler;
 }
 
-unsigned long ButtonApp::getHeldDuration() {
+uint32_t ButtonApp::getHeldDuration() {
   return timeKeyPressed;
 }
