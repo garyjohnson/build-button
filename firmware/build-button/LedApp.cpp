@@ -14,7 +14,7 @@ void LedApp::setup() {
 
 bool LedApp::update(uint32_t runTime, uint32_t updateDelta) {
   if(animation >= 0) {
-    handleAnimation(runTime, updateDelta);
+    handleAnimation2(runTime, updateDelta);
   } else {
     handleButtonHold(runTime, updateDelta);
   }
@@ -56,6 +56,28 @@ void LedApp::handleAnimation(uint32_t runTime, uint32_t updateDelta) {
   pixels.show();
 }
 
+void LedApp::handleAnimation2(uint32_t runTime, uint32_t updateDelta) {
+  float pi = 3.14159265359f;
+  float halfPi = pi/2.0f;
+  float divisor = 70000.0f;
+  if(animationDuration == 0) {
+    animationDuration = halfPi * divisor;
+  } else {
+    animationDuration += updateDelta;
+  }
+
+  if(animationDuration >= maxAnimationDuration) {
+    endAnimation();
+    return;
+  }
+
+  pixels.fill(highStages[animation]);
+
+
+  pixels.setBrightness((sin((float)animationDuration/divisor) * 125.0f) + 130.0f);
+  pixels.show();
+}
+
 void LedApp::handleButtonHold(uint32_t runTime, uint32_t updateDelta) {
   unsigned int maxPixels = (unsigned int)(((float)buttonPressDuration / (float)maxHold) * (NEOPIXEL_COUNT * 3));
   int maxPixel = maxPixels % NEOPIXEL_COUNT;
@@ -83,5 +105,6 @@ void LedApp::endAnimation() {
   animation = -1;
   animationDuration = 0;
   pixels.fill(off);
+  pixels.setBrightness(255);
   pixels.show();
 }

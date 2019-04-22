@@ -27,13 +27,14 @@ class LedApp {
 
     const uint32_t maxHold = 1000000;
     const uint32_t blinkDuration = 100000;
-    const uint32_t maxAnimationDuration = 600000;
+    const uint32_t maxAnimationDuration = 1200000;
 
     int animation = -1;
     uint32_t animationDuration = 0;
     uint32_t buttonPressDuration = 0;
 
     void handleAnimation(uint32_t runTime, uint32_t updateDelta);
+    void handleAnimation2(uint32_t runTime, uint32_t updateDelta);
     void handleButtonHold(uint32_t runTime, uint32_t updateDelta);
     void endAnimation();
   public:
