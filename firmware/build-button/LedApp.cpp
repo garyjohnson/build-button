@@ -14,7 +14,7 @@ void LedApp::setup() {
 
 bool LedApp::update(uint32_t runTime, uint32_t updateDelta) {
   if(animation >= 0) {
-    handleAnimation2(runTime, updateDelta);
+    handleAnimation(runTime, updateDelta);
   } else {
     handleButtonHold(runTime, updateDelta);
   }
@@ -39,29 +39,9 @@ void LedApp::startAnimationForStage(unsigned int stage) {
 }
 
 void LedApp::handleAnimation(uint32_t runTime, uint32_t updateDelta) {
-  animationDuration += updateDelta;
-
-  if(animationDuration >= maxAnimationDuration) {
-    endAnimation();
-    return;
-  }
-
-  unsigned int blinkPhase = animationDuration / blinkDuration;
-  bool on = blinkPhase % 2 == 0;
-  if(on) {
-    pixels.fill(highStages[animation]);
-  } else {
-    pixels.fill(off);
-  }
-  pixels.show();
-}
-
-void LedApp::handleAnimation2(uint32_t runTime, uint32_t updateDelta) {
-  float pi = 3.14159265359f;
-  float halfPi = pi/2.0f;
   float divisor = 70000.0f;
   if(animationDuration == 0) {
-    animationDuration = halfPi * divisor;
+    animationDuration = HALF_PI * divisor;
   } else {
     animationDuration += updateDelta;
   }

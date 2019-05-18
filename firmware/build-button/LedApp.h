@@ -6,6 +6,8 @@
 #define PIN_NEOPIXEL A0
 #define NEOPIXEL_COUNT 24
 
+#define HALF_PI 1.570796327f
+
 class LedApp {
   private:
     Adafruit_NeoPixel pixels;
@@ -34,7 +36,6 @@ class LedApp {
     uint32_t buttonPressDuration = 0;
 
     void handleAnimation(uint32_t runTime, uint32_t updateDelta);
-    void handleAnimation2(uint32_t runTime, uint32_t updateDelta);
     void handleButtonHold(uint32_t runTime, uint32_t updateDelta);
     void endAnimation();
   public:
